@@ -27,25 +27,20 @@ tmdb-movies-master/
 ### Caso ainda não tenha o UV instalado, execute:
 
 ````markdown
-```text
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ````
 
 # Instalação e Configuração
 1. Clone o repositório
 
-
 ````markdown
-```text
 git clone git@github.com:Andersonn-2000/tmdb-movies.git
 cd tmdb-movies
 ````
 
 2. Instale as dependências
 
-
 ````markdown
-```text
 uv sync
 ````
 
@@ -55,9 +50,7 @@ Isso instalará todas as dependências listadas no pyproject.toml de forma deter
 
 - Crie um arquivo .env na raiz do projeto com a sua chave de API do TMDB:
 
-
 ````markdown
-```text
 API_KEY=sua_chave_api
 ````
 
@@ -65,9 +58,7 @@ API_KEY=sua_chave_api
 
 Com o ambiente ativado e o .env configurado, execute o script principal:
 
-
 ````markdown
-```text
 uv run main.py
 ````
 
@@ -112,7 +103,6 @@ Após a execução, o dataset será salvo em:
 
 # O CSV contém as seguintes colunas:
 
-````markdown
 ```text
 | Coluna            | Descrição                              |
 |-------------------|----------------------------------------|
@@ -123,7 +113,13 @@ Após a execução, o dataset será salvo em:
 | `revenue`         | Receita de bilheteria                  |
 | `runtime`         | Duração em minutos                     |
 | `status`          | Status do filme (ex: `Released`)       |
-````
+```
 
 # Dependências
-PacoteVersão mínimaUsopandas>=3.0.2Manipulação e exportação dos dadosrequests>=2.33.1Requisições HTTP para a API do TMDBpython-dotenv>=1.2.2Carregamento das variáveis de ambiente
+```text
+| Pacote           | Versão mínima | Uso                                  |
+|------------------|---------------|--------------------------------------|
+| `pandas`         | `>=3.0.2`     | Manipulação e exportação dos dados   |
+| `requests`       | `>=2.33.1`    | Requisições HTTP para a API do TMDB  |
+| `python-dotenv`  | `>=1.2.2`     | Carregamento das variáveis de ambiente|
+```
