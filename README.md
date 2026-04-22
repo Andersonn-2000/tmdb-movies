@@ -1,17 +1,19 @@
 # Estrutura do Projeto
 
-tmdb-movies/
+```text
+tmdb-movies-master/
 ├── cortex/
+│   ├── data/
+│   │   └── raw/            # Local de destino dos arquivos CSV gerados
 │   └── src/
-│       ├── client.py       # Cliente HTTP para a API do TMDB
-│       ├── service.py      # Lógica de negócio e orquestração das requisições
-│       ├── processor.py    # Processamento e normalização dos dados dos filmes
-│       └── exporter.py     # Exportação dos dados para CSV via pandas
-├── main.py                 # Ponto de entrada da aplicação
-├── pyproject.toml          # Configuração do projeto e dependências
-├── uv.lock                 # Lockfile gerado pelo UV
-├── .python-version         # Versão do Python fixada (3.12)
-└── .gitignore
+│       ├── client.py       # Cliente base para requisições HTTP
+│       ├── exporter.py     # Lógica de exportação para CSV (Pandas)
+│       ├── processor.py    # Tratamento e limpeza dos dados
+│       └── service.py      # Lógica de negócio (extração e threads)
+├── main.py                 # Ponto de entrada do script
+├── .env                    # Variáveis sensíveis (API Key)
+├── pyproject.toml          # Definição de dependências e projeto (uv)
+└── uv.lock                 # Lockfile do uv para reprodutibilidade
 
 # Pré-requisitos
 
