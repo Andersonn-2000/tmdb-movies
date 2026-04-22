@@ -26,17 +26,28 @@ tmdb-movies-master/
 
 ### Caso ainda não tenha o UV instalado, execute:
 
-- curl -LsSf https://astral.sh/uv/install.sh | sh
+````markdown
+```text
+curl -LsSf https://astral.sh/uv/install.sh | sh
+````
 
 # Instalação e Configuração
 1. Clone o repositório
 
-- git clone git@github.com:Andersonn-2000/tmdb-movies.git
-- cd tmdb-movies
+
+````markdown
+```text
+git clone git@github.com:Andersonn-2000/tmdb-movies.git
+cd tmdb-movies
+````
 
 2. Instale as dependências
 
-- uv sync
+
+````markdown
+```text
+uv sync
+````
 
 Isso instalará todas as dependências listadas no pyproject.toml de forma determinística, respeitando o uv.lock, e criará um ambiente virtual
 
@@ -44,13 +55,21 @@ Isso instalará todas as dependências listadas no pyproject.toml de forma deter
 
 - Crie um arquivo .env na raiz do projeto com a sua chave de API do TMDB:
 
-- *API_KEY=sua_chave_api*
+
+````markdown
+```text
+API_KEY=sua_chave_api
+````
 
 # Como Usar
 
 Com o ambiente ativado e o .env configurado, execute o script principal:
 
-- uv run main.py
+
+````markdown
+```text
+uv run main.py
+````
 
 # Arquitetura
 O projeto segue uma arquitetura em camadas, com separação clara de responsabilidades:
@@ -104,7 +123,6 @@ Após a execução, o dataset será salvo em:
 | `revenue`         | Receita de bilheteria                  |
 | `runtime`         | Duração em minutos                     |
 | `status`          | Status do filme (ex: `Released`)       |
-```
 ````
 
 # Dependências
