@@ -99,7 +99,9 @@ Camada de exportação. Responsável por:
 
 Após a execução, o dataset será salvo em:
 
-- cortex/data/raw/movies_tmdb.csv
+````markdown
+cortex/data/raw/movies_tmdb.csv
+````
 
 # O CSV contém as seguintes colunas:
 
