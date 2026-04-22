@@ -14,7 +14,7 @@ tmdb-movies-master/
 ├── .env                    # Variáveis sensíveis (API Key)
 ├── pyproject.toml          # Definição de dependências e projeto (uv)
 └── uv.lock                 # Lockfile do uv para reprodutibilidade
-```text
+```
 
 # Pré-requisitos
 
@@ -24,12 +24,12 @@ tmdb-movies-master/
 
 # Instalando o UV
 
-Caso ainda não tenha o UV instalado, execute:
+### Caso ainda não tenha o UV instalado, execute:
 
 - curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # Instalação e Configuração
-1. *Clone o repositório*
+1. Clone o repositório
 
 - git clone git@github.com:Andersonn-2000/tmdb-movies.git
 - cd tmdb-movies
@@ -92,7 +92,20 @@ Após a execução, o dataset será salvo em:
 - cortex/data/raw/movies_tmdb.csv
 
 # O CSV contém as seguintes colunas:
-ColunaDescriçãotitleTítulo do filmegenresGêneros separados por vírgulaoriginal_languageIdioma originalrelease_dateData de lançamentorevenueReceita de bilheteriaruntimeDuração em minutosstatusStatus do filme (ex: Released)
+
+````markdown
+```text
+| Coluna            | Descrição                              |
+|-------------------|----------------------------------------|
+| `title`           | Título do filme                        |
+| `genres`          | Gêneros separados por vírgula          |
+| `original_language` | Idioma original                      |
+| `release_date`    | Data de lançamento                     |
+| `revenue`         | Receita de bilheteria                  |
+| `runtime`         | Duração em minutos                     |
+| `status`          | Status do filme (ex: `Released`)       |
+```
+````
 
 # Dependências
 PacoteVersão mínimaUsopandas>=3.0.2Manipulação e exportação dos dadosrequests>=2.33.1Requisições HTTP para a API do TMDBpython-dotenv>=1.2.2Carregamento das variáveis de ambiente
