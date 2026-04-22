@@ -1,5 +1,5 @@
 from cortex.src.client import TMDBClient
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import datetime, timedelta
 
 class TMDBService:
     def __init__(self, client: TMDBClient):
@@ -7,60 +7,49 @@ class TMDBService:
     
     def get_details(self, movie_id: int):
         return self.client._get(endpoint=f"/movie/{movie_id}")
+    
+    def discover_movies(self, start_date: str, end_date: str, page: int = 1):
+        return self.client._get(
+            endpoint="/discover/movie",
+            params={
+                "primary_release_date.gte": start_date,
+                "primary_release_date.lte": end_date,
+                "page": page,
+                "sort_by": "primary_release_date.asc"
+            }
+        )
+    
+    def get_discover_range_safe(self, start_date, end_date) -> list:
 
-    def get_popular(self, pages: int) -> list:
-        movies = []
+        start = datetime.strptime(start_date, "%Y-%m-%d")
+        end = datetime.strptime(end_date, "%Y-%m-%d")
 
-        for page in range(1, pages + 1): 
-            data = self.client._get(endpoint="/movie/popular", params={"page": page})
-            movies.extend(data["results"])
-        
+        if start >= end:
+            return []
+
+        data = self.discover_movies(start_date, end_date, page=1)
+        total_pages = data.get("total_pages", 1)
+
+        if total_pages >= 500:
+            delta = (end - start).days // 2
+            mid = start + timedelta(days=delta)
+
+            movies = []
+            movies.extend(
+                self.get_discover_range_safe(start_date, mid.strftime("%Y-%m-%d"))
+            )
+            movies.extend(
+                self.get_discover_range_safe(
+                    (mid + timedelta(days=1)).strftime("%Y-%m-%d"),
+                    end_date
+                )
+            )
+            return movies
+
+        movies = data.get("results", [])
+
+        for page in range(2, total_pages + 1):
+            data = self.discover_movies(start_date, end_date, page)
+            movies.extend(data.get("results", []))
+
         return movies
-    
-    def get_popular_by_count(self, total_movies: int) -> list:
-        
-        movies = []
-        page = 1
-
-        while len(movies) < total_movies:
-            data = self.client._get(
-                endpoint="/movie/popular",
-                params={"page": page})
-            
-            results = data["results"]
-
-            if not results:
-                break
-
-            movies.extend(results)
-            page += 1
-
-        return movies[:total_movies]
-
-    def get_full_dataset_by_count(self, total_movies: int) -> list:
-        basic_movies = self.get_popular_by_count(total_movies=total_movies)
-
-        full_movies = []
-        
-        with ThreadPoolExecutor(max_workers=10) as executor:
-            futures = [
-                executor.submit(self.get_details, movie["id"])
-                for movie in basic_movies]
-            
-            for future in as_completed(futures):
-                try:
-                    full_movies.append(future.result())
-                except Exception as error:
-                    print(f'Error: {error}')
-
-        return full_movies
-    
-    def get_full_dataset(self, pages: int) -> list:
-        basic_movies = self.get_popular(pages=pages)
-
-        full_movies = []
-        for movie in basic_movies:
-            details = self.get_details(movie["id"])
-            full_movies.append(details)
-        
-        return full_movies
