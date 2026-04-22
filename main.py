@@ -1,32 +1,65 @@
 import os
-import time
 import logging
+import time
 from dotenv import load_dotenv
+
 from cortex.src.client import TMDBClient
 from cortex.src.service import TMDBService
 from cortex.src.exporter import CSVExporter
 from cortex.src.processor import MovieProcessor
 
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s"
+)
+
 if __name__ == "__main__":
 
     load_dotenv()
-
-    logging.basicConfig(level=logging.INFO)
-
-    API_KEY = os.environ.get(key="API_KEY")
+    API_KEY = os.environ.get("API_KEY")
 
     client = TMDBClient(api_key=API_KEY)
-    movie_service = TMDBService(client=client)
-    exporter = CSVExporter(filename="cortex/data/raw/movies_tmdb.csv")
+    service = TMDBService(client)
+    exporter = CSVExporter("cortex/data/raw/movies_tmdb.csv")
 
-    start = time.time()
+    start_total = time.time()
 
-    data = movie_service.get_full_dataset_by_count(total_movies=100000)
-    processed_data = MovieProcessor.process_movies(data=data)
+    start_date = "2000-01-01"
+    end_date = "2021-12-31"
 
-    exporter.save(data=processed_data)
+    logging.info(f"Collecting data: {start_date} → {end_date}")
 
-    end = time.time()
+    try:
+        movies = service.get_discover_range_safe(start_date, end_date)
+    except Exception as e:
+        logging.error(f"Error collecting data: {e}")
+        exit()
 
-    logging.info("Dataset created successfully")
-    logging.info(f'Execution time: {end - start:.2f} seconds')
+    logging.info(f"{len(movies)} movies collected")
+
+    seen_ids = set()
+    filtered = []
+
+    for m in movies:
+        if m["id"] not in seen_ids:
+            seen_ids.add(m["id"])
+            filtered.append(m)
+
+    chunk_size = 200
+    total_movies = 0
+
+    for i in range(0, len(filtered), chunk_size):
+        chunk = filtered[i:i + chunk_size]
+
+        processed = MovieProcessor.process_movies(chunk)
+        exporter.save(processed)
+
+        total_movies += len(chunk)
+
+        logging.info(
+            f"Chunk {i//chunk_size + 1} | {len(chunk)} movies"
+        )
+    
+    logging.info("Dataset successfully created")
+    logging.info(f"Total movies saved: {total_movies}")
+    logging.info(f"Total time: {time.time() - start_total:.2f}s")
