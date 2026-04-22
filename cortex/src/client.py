@@ -7,7 +7,7 @@ class TMDBClient:
 
     base_url = "https://api.themoviedb.org/3"
 
-    def __init__(self, api_key: str, delay = 0.02):
+    def __init__(self, api_key: str, delay = 0.05):
         self.api_key = api_key
         self.session = requests.Session()
         self.delay = delay
