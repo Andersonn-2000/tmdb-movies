@@ -14,6 +14,7 @@ tmdb-movies-master/
 ├── .env                    # Variáveis sensíveis (API Key)
 ├── pyproject.toml          # Definição de dependências e projeto (uv)
 └── uv.lock                 # Lockfile do uv para reprodutibilidade
+```text
 
 # Pré-requisitos
 
