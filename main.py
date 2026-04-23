@@ -25,12 +25,12 @@ if __name__ == "__main__":
     start_total = time.time()
 
     start_date = "2000-01-01"
-    end_date = "2021-12-31"
+    end_date = "2001-12-31"
 
-    logging.info(f"Collecting data: {start_date} → {end_date}")
+    logging.info(f"Collecting data: {start_date} - {end_date}")
 
     try:
-        movies = service.get_discover_range_safe(start_date, end_date)
+        movies = service.get_discover_range_safe(start_date, end_date, max_pages=10)
     except Exception as e:
         logging.error(f"Error collecting data: {e}")
         exit()
