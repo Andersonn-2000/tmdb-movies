@@ -19,7 +19,7 @@ class TMDBService:
             }
         )
     
-    def get_discover_range_safe(self, start_date, end_date) -> list:
+    def get_discover_range_safe(self, start_date: str, end_date: str, max_pages: int | None) -> list:
 
         start = datetime.strptime(start_date, "%Y-%m-%d")
         end = datetime.strptime(end_date, "%Y-%m-%d")
@@ -29,7 +29,10 @@ class TMDBService:
 
         data = self.discover_movies(start_date, end_date, page=1)
         total_pages = data.get("total_pages", 1)
-
+        
+        if max_pages is not None:
+            total_pages = min(total_pages, max_pages)
+            
         if total_pages >= 500:
             delta = (end - start).days // 2
             mid = start + timedelta(days=delta)
