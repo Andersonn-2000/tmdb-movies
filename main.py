@@ -35,8 +35,6 @@ if __name__ == "__main__":
         logging.error(f"Error collecting data: {e}")
         exit()
 
-    logging.info(f"{len(movies)} movies collected")
-
     seen_ids = set()
     filtered = []
 
